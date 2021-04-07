@@ -6,7 +6,6 @@ import { togglePlotModal } from '../../actions';
 import deepmerge from 'deepmerge';
 import { dark_modal } from '../../utils/chart_templates/dark';
 import { light_modal } from '../../utils/chart_templates/light';
-import './plot-modal.css';
 
 /**
  * Kedro-UI modal to allow users to choose between SVG/PNG export formats
