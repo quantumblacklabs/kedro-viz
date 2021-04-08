@@ -481,7 +481,6 @@ export class FlowChart extends Component {
   render() {
     const { chartSize, layers, visibleGraph } = this.props;
     const { outerWidth = 0, outerHeight = 0 } = chartSize;
-    console.log(this.props.nodes);
 
     return (
       <div

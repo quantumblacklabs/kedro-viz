@@ -6,13 +6,16 @@ import { togglePlotModal } from '../../actions';
 import deepmerge from 'deepmerge';
 import { dark_modal } from '../../utils/chart_templates/dark';
 import { light_modal } from '../../utils/chart_templates/light';
+import { getClickedNodeMetaData } from '../../selectors/metadata';
 import './plotly-chart-modal.css';
 
 /**
  * Kedro-UI modal to allow users to choose between SVG/PNG export formats
  */
-const PlotModal = ({ theme, data, layout, onToggle, visible }) => {
+const PlotModal = ({ theme, data, layout, onToggle, visible, metadata }) => {
   if (!visible.plotModal) return null;
+  const plotData = metadata ? metadata.plot.data : null;
+  const plotLayout = metadata ? metadata.plot.layout : null;
   return (
     <Modal
       title="Plotly Visualization"
@@ -20,8 +23,8 @@ const PlotModal = ({ theme, data, layout, onToggle, visible }) => {
       theme={theme}
       visible={visible.plotModal}>
       <Plot
-        data={data}
-        layout={updateLayout(theme, layout)}
+        data={plotData}
+        layout={updateLayout(theme, plotLayout)}
         style={{ width: '100%', height: '100%' }}
         useResizeHandler={true}
       />
@@ -42,6 +45,7 @@ const updateLayout = (theme, layout) => {
 export const mapStateToProps = (state) => ({
   visible: state.visible,
   theme: state.theme,
+  metadata: getClickedNodeMetaData(state),
 });
 
 export const mapDispatchToProps = (dispatch) => ({
