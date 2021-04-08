@@ -450,6 +450,7 @@ export class FlowChart extends Component {
    * @param {?Object} options Options for the tooltip if required
    */
   showTooltip(event, node, options = {}) {
+    console.log(node);
     this.setState({
       tooltip: {
         targetRect: event && event.target.getBoundingClientRect(),
