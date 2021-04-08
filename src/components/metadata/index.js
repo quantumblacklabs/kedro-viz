@@ -39,7 +39,7 @@ const MetaData = ({
   const isParametersNode = metadata?.node.type === 'parameters';
 
   const hasCode = Boolean(metadata?.code);
-  const hasGraph = Boolean(metadata?.graph);
+  const hasPlot = Boolean(metadata?.plot);
   const showCodePanel = visible && visibleCode && hasCode;
   const showCodeSwitch = hasCode;
 
@@ -173,15 +173,17 @@ const MetaData = ({
                 visible={isTaskNode}
                 value={metadata.docstring}
               />
-              <MetaDataRow label="Plotly Chart:" visible={isDataNode}>
-                <div>
-                  <PlotlyChart
-                    data={plotData.data}
-                    layout={plotData.layout}
-                    config={plotData.config}
-                  />
-                </div>
-              </MetaDataRow>
+              {hasPlot && (
+                <MetaDataRow label="Plotly Chart:" visible={isDataNode}>
+                  <div>
+                    <PlotlyChart
+                      data={metadata.plot.data}
+                      layout={metadata.plot.layout}
+                      config={metadata.plot.config}
+                    />
+                  </div>
+                </MetaDataRow>
+              )}
             </dl>
           </>
         )}

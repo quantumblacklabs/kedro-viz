@@ -48,6 +48,7 @@ export const getClickedNodeMetaData = createSelector(
     (state) => state.node.code,
     (state) => state.node.parameters,
     (state) => state.node.datasetType,
+    (state) => state.node.plot,
   ],
   (
     nodeId,
@@ -58,7 +59,8 @@ export const getClickedNodeMetaData = createSelector(
     nodeFilepaths,
     nodeCodes,
     nodeParameters,
-    nodeDatasetTypes
+    nodeDatasetTypes,
+    nodePlots
   ) => {
     const node = nodes[nodeId];
 
@@ -83,6 +85,7 @@ export const getClickedNodeMetaData = createSelector(
       code: nodeCodes[node.id],
       filepath: nodeFilepaths[node.id],
       datasetType: nodeDatasetTypes[node.id],
+      plot: nodePlots[node.id],
     };
 
     // Note: node.sources node.targets require oldgraph enabled
