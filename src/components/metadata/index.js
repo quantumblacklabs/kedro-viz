@@ -183,9 +183,9 @@ const MetaData = ({
                   <div>
                     <a id="plotly-modal" href="#" onClick={onPlotClick}>
                       <PlotlyChart
-                        data={plotData.data}
-                        layout={plotData.layout}
-                        config={plotData.config}
+                        data={metadata.plot.data}
+                        layout={metadata.plot.layout}
+                        config={metadata.plot.config}
                       />
                     </a>
                   </div>

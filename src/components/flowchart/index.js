@@ -450,13 +450,12 @@ export class FlowChart extends Component {
    * @param {?Object} options Options for the tooltip if required
    */
   showTooltip(event, node, options = {}) {
-    console.log(node);
     this.setState({
       tooltip: {
         targetRect: event && event.target.getBoundingClientRect(),
         text: node && node.fullName,
         visible: true,
-        graph: node.type === 'data' ? plotData : null,
+        graph: this.props.plots[node.id],
         ...options,
       },
     });
@@ -482,6 +481,7 @@ export class FlowChart extends Component {
   render() {
     const { chartSize, layers, visibleGraph } = this.props;
     const { outerWidth = 0, outerHeight = 0 } = chartSize;
+    console.log(this.props.nodes);
 
     return (
       <div
@@ -566,6 +566,7 @@ export const mapStateToProps = (state, ownProps) => ({
   visibleSidebar: state.visible.sidebar,
   visibleCode: state.visible.code,
   visibleMetaSidebar: getVisibleMetaSidebar(state),
+  plots: state.node.plot,
   ...ownProps,
 });
 
