@@ -20,7 +20,6 @@ describe('getLinkedNodes function', () => {
       ['sheep', '6525f2e6'],
       ['cat', '9d989e8d'],
       ['dog', 'e4951252'],
-      ['parameters', 'f1f1425b'],
     ])('node %s should be true', (name, id) => {
       expect(linkedNodes[id]).toBe(true);
     });

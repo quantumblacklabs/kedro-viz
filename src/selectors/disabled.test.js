@@ -11,7 +11,13 @@ import { toggleLayers } from '../actions';
 import { toggleTagFilter } from '../actions/tags';
 import reducer from '../reducers';
 
-const getNodeIDs = (state) => state.node.ids;
+const filteredParamNodes = (state) =>
+  state.node.filter((node) => node.type !== 'parameters');
+console.log(filteredParamNodes);
+
+const getNodeIDs = filteredParamNodes.map((node) => node.ids);
+
+// const getNodeIDs = (state) => state.node.ids;
 const getEdgeIDs = (state) => state.edge.ids;
 const getEdgeSources = (state) => state.edge.sources;
 const getEdgeTargets = (state) => state.edge.targets;
@@ -184,6 +190,7 @@ describe('Selectors', () => {
 
   describe('getVisibleNodeIDs', () => {
     it('returns an array of node IDs', () => {
+      // this now has to take out parameters as the filtered nodes
       expect(getVisibleNodeIDs(mockState.animals)).toEqual(
         mockState.animals.node.ids
       );

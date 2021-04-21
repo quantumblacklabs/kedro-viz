@@ -32,20 +32,25 @@ describe('MetaData', () => {
   describe('All nodes', () => {
     it('limits parameters to 10 values and expands when button clicked', () => {
       // Get metadata for a sample
-      const metadata = getClickedNodeMetaData(prepareState({
-        data: animals,
-        afterLayoutActions: [
-          () => {
-            // Click the expected node
-            return toggleNodeClicked(salmonTaskNodeId);
-          },
-        ],
-      }));
+      const metadata = getClickedNodeMetaData(
+        prepareState({
+          data: animals,
+          flags: { parameters: true }, //this is added to enable parameter nodes as they are off by default
+          afterLayoutActions: [
+            () => {
+              // Click the expected node
+              return toggleNodeClicked(salmonTaskNodeId);
+            },
+          ],
+        })
+      );
 
       // Add extra mock parameters
       metadata.parameters = Array.from({ length: 20 }, (_, i) => `Test: ${i}`);
 
-      const wrapper = setup.mount(<MetaData visible={true} metadata={metadata} />);
+      const wrapper = setup.mount(
+        <MetaData visible={true} metadata={metadata} />
+      );
 
       const parametersRow = () => rowByLabel(wrapper, 'Parameters (20):');
       const expandButton = parametersRow().find(
@@ -94,12 +99,7 @@ describe('MetaData', () => {
     it('shows the node inputs', () => {
       const wrapper = mount({ nodeId: salmonTaskNodeId });
       const row = rowByLabel(wrapper, 'Inputs:');
-      expect(textOf(rowValue(row))).toEqual([
-        'Cat',
-        'Dog',
-        'Parameters',
-        'Params:rabbit',
-      ]);
+      expect(textOf(rowValue(row))).toEqual(['Cat', 'Dog']);
     });
 
     it('shows the node outputs', () => {

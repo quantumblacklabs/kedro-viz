@@ -41,7 +41,7 @@ export const createInitialPipelineState = () => ({
       parameters: 'Parameters',
     },
     disabled: {
-      parameters: isTest ? false : true,
+      parameters: true,
     },
   },
   edge: {
