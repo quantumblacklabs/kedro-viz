@@ -1,8 +1,7 @@
 import { createSelector } from 'reselect';
-import { getGraphNodes } from './nodes';
+import { getGraphNodes, getNodeTargetNames, getNodeSourceNames } from './nodes';
 
 const getClickedNode = (state) => state.node.clicked;
-
 /**
  * Comparison for sorting alphabetically by name, otherwise by value
  */
@@ -41,6 +40,8 @@ export const getClickedNodeMetaData = createSelector(
   [
     getClickedNode,
     getGraphNodes,
+    getNodeSourceNames,
+    getNodeTargetNames,
     (state) => state.node.tags,
     (state) => state.tag.name,
     (state) => state.pipeline,
@@ -53,6 +54,8 @@ export const getClickedNodeMetaData = createSelector(
   (
     nodeId,
     nodes = {},
+    nodeSources,
+    nodeTargets,
     nodeTags,
     tagNames,
     pipeline,
@@ -67,7 +70,6 @@ export const getClickedNodeMetaData = createSelector(
     if (!node) {
       return null;
     }
-
     const parameters =
       nodeParameters[node.id] &&
       Object.entries(nodeParameters[node.id]).map(
@@ -86,18 +88,29 @@ export const getClickedNodeMetaData = createSelector(
       filepath: nodeFilepaths[node.id],
       plot: nodePlot[node.id],
       datasetType: nodeDatasetTypes[node.id],
+      inputs: {},
+      outputs: {},
     };
-
-    // Note: node.sources node.targets require oldgraph enabled
-    if (node.sources && node.targets) {
-      metadata.inputs = node.sources
-        .map((edge) => nodes[edge.source])
-        .sort(sortAlpha);
-      metadata.outputs = node.targets
-        .map((edge) => nodes[edge.target])
-        .sort(sortAlpha);
-    }
-
+    metadata.inputs.enabled = node.sources
+      .map((s) =>
+        nodeSources[node.id].includes(s.sourceNode.name)
+          ? s.sourceNode.name
+          : undefined
+      )
+      .filter(Boolean);
+    metadata.inputs.disabled = nodeSources[node.id]
+      .filter((n) => !metadata.inputs.enabled.includes(n))
+      .filter(Boolean);
+    metadata.outputs.enabled = node.targets
+      .map((s) =>
+        nodeTargets[node.id].includes(s.targetNode.name)
+          ? s.targetNode.name
+          : undefined
+      )
+      .filter(Boolean);
+    metadata.outputs.disabled = nodeTargets[node.id]
+      .filter((n) => !metadata.outputs.enabled.includes(n))
+      .filter(Boolean);
     return metadata;
   }
 );
