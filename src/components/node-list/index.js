@@ -17,7 +17,10 @@ import { getGroupedNodes, getNodeSelected } from '../../selectors/nodes';
 import { toggleTagActive, toggleTagFilter } from '../../actions/tags';
 import { toggleTypeDisabled } from '../../actions/node-type';
 import { toggleParametersHovered } from '../../actions';
-import { toggleModularPipelineActive } from '../../actions/modular-pipelines';
+import {
+  toggleModularPipelineActive,
+  toggleModularPipelineFilter,
+} from '../../actions/modular-pipelines';
 import {
   loadNodeData,
   toggleNodeHovered,
@@ -43,6 +46,7 @@ const NodeListProvider = ({
   onToggleTagActive,
   onToggleTagFilter,
   onToggleModularPipelineActive,
+  onToggleModularPipelineFilter,
   onToggleTypeDisabled,
   modularPipelines,
 }) => {
@@ -218,6 +222,9 @@ export const mapDispatchToProps = (dispatch) => ({
   },
   onToggleNodesDisabled: (nodeIDs, disabled) => {
     dispatch(toggleNodesDisabled(nodeIDs, disabled));
+  },
+  onToggleModularPipelineFilter: (modularPipelineIDs, enabled) => {
+    dispatch(toggleModularPipelineFilter(modularPipelineIDs, enabled));
   },
 });
 
