@@ -1,3 +1,8 @@
+@import '../../../styles/extends';
+@import '../../../styles/mixins';
+@import '../../../styles/variables';
+@import './variables';
+
 /*
 
   Notes: 
@@ -11,9 +16,16 @@
   display: flex;
   align-items: center;
 
-  // force gpu layers to avoid drawing lag on scroll
+  // Fixed height required for lazy list (see note above).
+  height: 37px;
+
+  // Force gpu layers to avoid drawing lag on scroll.
   transform: translate(0, 0);
   cursor: default;
+
+  &--kind-filter {
+    padding: 0 $row-offset-right 0 $row-offset-left;
+  }
 
   &--active,
   &--visible:hover {
@@ -21,7 +33,7 @@
   }
 
   &--selected,
-  // additional selector required to increase specificity to override previous rule:
+  // Additional selector required to increase specificity to override previous rule:
   &--visible#{&}--selected {
     background-color: var(--color-nodelist-row-selected);
   }
@@ -44,9 +56,6 @@
 }
 
 .pipeline-nodelist__row__type-icon {
-  margin-right: $row-icon-margin;
-  margin-left: -1em;
-
   &--nested > * {
     opacity: 0.3;
   }
