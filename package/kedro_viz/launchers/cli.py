@@ -28,9 +28,11 @@
 """`kedro_viz.launchers.cli` launches the viz server as a CLI app."""
 
 import traceback
+from pathlib import Path
 
 import click
 from kedro.framework.cli.utils import KedroCliError
+from watchgod import run_process
 
 from kedro_viz.server import run_server
 
@@ -78,6 +80,11 @@ def commands():
     "If not set, the default pipeline is visualised",
 )
 @click.option(
+    "--autoreload",
+    is_flag=True,
+    help="Autoreload viz server when a Python file change in the Kedro project",
+)
+@click.option(
     "--env",
     "-e",
     type=str,
@@ -87,10 +94,29 @@ def commands():
     help="Kedro configuration environment. If not specified, "
     "catalog config in `local` will be used",
 )
-def viz(host, port, browser, load_file, save_file, pipeline, env):
+def viz(host, port, browser, load_file, save_file, pipeline, env, autoreload):
     """Visualise a Kedro pipeline using Kedro viz."""
     try:
-        run_server(host, port, browser, load_file, save_file, pipeline, env)
+        if autoreload:
+            project_path = Path.cwd()
+            run_process(
+                project_path,
+                run_server,
+                kwargs={
+                    "host": host,
+                    "port": port,
+                    # if running on autoreload, prevent browser from openning new tab
+                    # we can detect if the viz tab is open and re-load it
+                    # but this requires selenium
+                    "browser": False,
+                    "load_file": load_file,
+                    "save_file": save_file,
+                    "pipeline_name": pipeline,
+                    "env": env,
+                },
+            )
+        else:
+            run_server(host, port, browser, load_file, save_file, pipeline, env)
     except Exception as ex:  # pragma: no cover
         traceback.print_exc()
         raise KedroCliError(str(ex)) from ex
